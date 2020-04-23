@@ -46,6 +46,11 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
 
 - stage: Deploy
   jobs:
@@ -53,16 +58,16 @@ stages:
     pool:
       name: Hosted VS2017
     steps:
-      - task: DownloadBuildArtifacts@0
-        inputs:
-          buildType: 'current'
-          downloadType: 'single'
-          downloadPath: '$(System.ArtifactsDirectory)'
-          artifactName: 'drop'
-      - task: AzureRmWebAppDeployment@4
-        inputs:
-          ConnectionType: 'AzureRM'
-          azureSubscription: 'Essai gratuit(65ad8b04-b1bb-4428-a24b-bddbc019ee67)'
-          appType: 'webApp'
-          WebAppName: 'pul-yaml-yacine'
-          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        artifactName: 'drop'
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Essai gratuit(65ad8b04-b1bb-4428-a24b-bddbc019ee67)'
+        appType: 'webApp'
+        WebAppName: 'pul-yaml-yacine'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/drop/*.zip'
